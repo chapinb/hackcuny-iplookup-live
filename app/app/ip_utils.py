@@ -1,5 +1,7 @@
 import ipaddress
 
+import requests
+
 
 def is_ip_address(value: str) -> bool:
     try:
@@ -7,3 +9,19 @@ def is_ip_address(value: str) -> bool:
         return True
     except ValueError:
         return False
+
+
+def get_ip_address_location(value: str) -> dict[str, str | float]:
+    response = requests.get(
+        f"http://ip-api.com/json/{value}",
+        timeout=30,
+    )
+    response.raise_for_status()
+    response_data = response.json()
+
+    return {
+        "lat": response_data["lat"],
+        "lon": response_data["lon"],
+        "city": response_data["city"],
+        "country": response_data["country"],
+    }
