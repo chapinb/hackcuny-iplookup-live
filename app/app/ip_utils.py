@@ -19,9 +19,6 @@ def get_ip_address_location(value: str) -> dict[str, str | float]:
     response.raise_for_status()
     response_data = response.json()
 
-    return {
-        "lat": response_data["lat"],
-        "lon": response_data["lon"],
-        "city": response_data["city"],
-        "country": response_data["country"],
-    }
+    fields_we_care_about = ["lat", "lon", "city", "country"]
+
+    return {x: response_data[x] for x in fields_we_care_about}
